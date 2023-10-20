@@ -1,0 +1,40 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+
+}
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define the data model for users
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  username       String   @unique
+  email          String   @unique
+  password       String
+  likedArtists   Artist[] @relation(fields: [likedArtistIds], references: [id])
+  likedArtistIds String[] @db.ObjectId
+  likedAlbums    Album[]  @relation(fields: [likedAlbumIds], references: [id])
+  likedAlbumIds  String[] @db.ObjectId
+}
+
+// Define the data model for artists
+model Artist {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  genre    String
+  users    User[]   @relation(fields: [userIds], references: [id])
+  userIds  String[] @db.ObjectId
+  albums   Album[] 
+}
+
+// Define the data model for albums
+model Album {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  artist   Artist @relation(fields: [artistId], references: [id])
+  artistId String @db.ObjectId
+  users    User[]  @relation(fields: [userIds], references: [id])
+  userIds  String[] @db.ObjectId
+}

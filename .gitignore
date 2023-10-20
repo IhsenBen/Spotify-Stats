@@ -1,0 +1,3 @@
+backend/.env
+backend/docker-compose.yml
+backend/LICENSE
