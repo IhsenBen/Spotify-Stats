@@ -12,7 +12,7 @@ const usersResolver: UserModule.Resolvers = {
     },
     user: async (_, { id }) => {
       const user = await prisma.user.findUnique({
-        where: { id: Number(id) },
+        where: { id: String(id) },
       });
       if (!user) {
         throw new GraphQLError("User not found");
@@ -34,6 +34,7 @@ const usersResolver: UserModule.Resolvers = {
           email: input.email,
           username: input.userName,
           password: await bcrypt.hash(input.password, 10),
+          createdAt: new Date(),
         },
       });
       return user;

@@ -17,17 +17,75 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Album = {
+  __typename?: 'Album';
+  artist: User;
+  artistId: Scalars['Int']['output'];
+  createdAt: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
+};
+
+export type AlbumInput = {
+  artistId: Scalars['Int']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type Artist = {
+  __typename?: 'Artist';
+  albums: Array<Album>;
+  genre: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  users: Array<User>;
+};
+
+export type ArtistInput = {
+  albums?: InputMaybe<Array<Scalars['ID']['input']>>;
+  genre?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+  users?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createAlbum: Album;
+  createArtist: Artist;
   createUser?: Maybe<User>;
+  deleteAlbum: Album;
+  deleteArtist: Artist;
   deleteUser?: Maybe<User>;
   loginUser?: Maybe<User>;
+  updateAlbum: Album;
+  updateArtist: Artist;
   updateUser?: Maybe<User>;
+};
+
+
+export type MutationCreateAlbumArgs = {
+  input: AlbumInput;
+};
+
+
+export type MutationCreateArtistArgs = {
+  input: ArtistInput;
 };
 
 
 export type MutationCreateUserArgs = {
   input: UserInput;
+};
+
+
+export type MutationDeleteAlbumArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteArtistArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -41,14 +99,38 @@ export type MutationLoginUserArgs = {
 };
 
 
+export type MutationUpdateAlbumArgs = {
+  input: AlbumInput;
+};
+
+
+export type MutationUpdateArtistArgs = {
+  input: ArtistInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   input: UserInput;
 };
 
 export type Query = {
   __typename?: 'Query';
+  album: Album;
+  albums: Array<Album>;
+  artist: Artist;
+  artists: Array<Artist>;
   user?: Maybe<User>;
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryAlbumArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryArtistArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -144,8 +226,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Album: ResolverTypeWrapper<Album>;
+  AlbumInput: AlbumInput;
+  Artist: ResolverTypeWrapper<Artist>;
+  ArtistInput: ArtistInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -155,8 +242,13 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Album: Album;
+  AlbumInput: AlbumInput;
+  Artist: Artist;
+  ArtistInput: ArtistInput;
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -164,14 +256,43 @@ export type ResolversParentTypes = {
   UserInput: UserInput;
 };
 
+export type AlbumResolvers<ContextType = any, ParentType extends ResolversParentTypes['Album'] = ResolversParentTypes['Album']> = {
+  artist?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  artistId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ArtistResolvers<ContextType = any, ParentType extends ResolversParentTypes['Artist'] = ResolversParentTypes['Artist']> = {
+  albums?: Resolver<Array<ResolversTypes['Album']>, ParentType, ContextType>;
+  genre?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createAlbum?: Resolver<ResolversTypes['Album'], ParentType, ContextType, RequireFields<MutationCreateAlbumArgs, 'input'>>;
+  createArtist?: Resolver<ResolversTypes['Artist'], ParentType, ContextType, RequireFields<MutationCreateArtistArgs, 'input'>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
+  deleteAlbum?: Resolver<ResolversTypes['Album'], ParentType, ContextType, RequireFields<MutationDeleteAlbumArgs, 'id'>>;
+  deleteArtist?: Resolver<ResolversTypes['Artist'], ParentType, ContextType, RequireFields<MutationDeleteArtistArgs, 'id'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   loginUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'input'>>;
+  updateAlbum?: Resolver<ResolversTypes['Album'], ParentType, ContextType, RequireFields<MutationUpdateAlbumArgs, 'input'>>;
+  updateArtist?: Resolver<ResolversTypes['Artist'], ParentType, ContextType, RequireFields<MutationUpdateArtistArgs, 'input'>>;
   updateUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  album?: Resolver<ResolversTypes['Album'], ParentType, ContextType, RequireFields<QueryAlbumArgs, 'id'>>;
+  albums?: Resolver<Array<ResolversTypes['Album']>, ParentType, ContextType>;
+  artist?: Resolver<ResolversTypes['Artist'], ParentType, ContextType, RequireFields<QueryArtistArgs, 'id'>>;
+  artists?: Resolver<Array<ResolversTypes['Artist']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryUserArgs>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
 };
@@ -187,6 +308,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type Resolvers<ContextType = any> = {
+  Album?: AlbumResolvers<ContextType>;
+  Artist?: ArtistResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
