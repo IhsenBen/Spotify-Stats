@@ -4,74 +4,73 @@ import { prisma } from "../../../prisma/client";
 import { GraphQLError } from "graphql";
 
 export const resolvers: AlbumModule.Resolvers = {
-    Album: {
-        artist: async (parent) => {
-            const user = await prisma.user.findUnique({
-                where: { id: parent.artistId },
-            });
-            if (!user) {
-                throw new GraphQLError("User not found");
-            }
-            return user;
-        },
+  Album: {
+    artist: async (parent) => {
+      const user = await prisma.user.findUnique({
+        where: { id: parent.id },
+      });
+      if (!user) {
+        throw new GraphQLError("User not found");
+      }
+      return user;
     },
-    Query: {
-        albums: async () => {
-            const albums = await prisma.album.findMany();
-            return albums;
-        },
-        album: async (_, { id }) => {
-            const album = await prisma.album.findUnique({
-                where: { id: Number(id) },
-            });
-            if (!album) {
-                throw new GraphQLError("Album not found");
-            }
-            return album;
-        },
+  },
+  Query: {
+    albums: async () => {
+      const albums = await prisma.album.findMany();
+      return albums;
     },
-    Mutation: {
-        createAlbum: async (_, { input }) => {
-            const album = await prisma.album.create({
-                data: {
-                    ...input,
-                },
-            });
-            return album;
+    album: async (_, { id }) => {
+      const album = await prisma.album.findUnique({
+        where: { id: String(id) },
+      });
+      if (!album) {
+        throw new GraphQLError("Album not found");
+      }
+      return album;
+    },
+  },
+  Mutation: {
+    createAlbum: async (_, { input }) => {
+      const album = await prisma.album.create({
+        data: {
+          ...input,
         },
-        updateAlbum: async (_, { input }) => {
-            const album = await prisma.album.update({
-                where: { id: Number(input.id) },
-                data: {
-                    ...input,
-                },
-            });
-            if (!album) {
-                throw new GraphQLError("Album not found");
-            }
-            return album;
+      });
+      return album;
+    },
+    updateAlbum: async (_, { input }) => {
+      const album = await prisma.album.update({
+        where: { id: String(input.id) },
+        data: {
+          ...input,
         },
-        deleteAlbum: async (_, { id }) => {
-            const exists = await prisma.album.count({
-                where: { id: Number(id) },
-            });
-            if (!exists) {
-                throw new GraphQLError("Album not found");
-            }
-            const album = await prisma.album.delete({
-                where: { id: Number(id) },
-            });
+      });
+      if (!album) {
+        throw new GraphQLError("Album not found");
+      }
+      return album;
+    },
+    deleteAlbum: async (_, { id }) => {
+      const exists = await prisma.album.count({
+        where: { id: String(id) },
+      });
+      if (!exists) {
+        throw new GraphQLError("Album not found");
+      }
+      const album = await prisma.album.delete({
+        where: { id: Number(id) },
+      });
 
-            return album;
-        },
+      return album;
     },
+  },
 };
 
-
 export const albumModule = createModule({
-    id: "albums",
-    dirname: __dirname,
-    typeDefs: gql`
+  id: "albums",
+  dirname: __dirname,
+  typeDefs: gql`
         type Album {
             id: ID!
             title: String!
@@ -83,7 +82,8 @@ export const albumModule = createModule({
 
         input AlbumInput {
             title: String!
-            artistId: Int!
+            artistId: String
+            id: String!
         }
 
         extend type Query {
@@ -97,5 +97,5 @@ export const albumModule = createModule({
             deleteAlbum(id: ID!): Album!
         }
     `,
-    resolvers,
+  resolvers,
 });
