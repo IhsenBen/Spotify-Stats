@@ -23,6 +23,7 @@
     "@graphql-codegen/typescript-resolvers": "^4.0.1",
     "@types/cors": "^2.8.15",
     "@types/node": "^20.8.7",
+    "@types/spotify-web-api-node": "^5.0.9",
     "nodemon": "^3.0.1",
     "prisma": "^5.4.2",
     "rimraf": "^5.0.5",
@@ -40,6 +41,7 @@
     "express": "^4.18.2",
     "graphql": "^16.8.1",
     "graphql-modules": "^2.2.0",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.6",
+    "spotify-web-api-node": "^5.0.2"
   }
 }
