@@ -85,17 +85,23 @@ export const usersModule = createModule({
   dirname: __dirname,
   typeDefs: gql`
     input UserInput {
+      id: ID
       userName: String
       password: String
       email: String
-      id: ID
+      likedArtistIds: [ID]
+      likedAlbumIds: [ID]
+      role: String
     }
+
     type User {
       id: ID
       userName: String
       password: String
       email: String
       role: String
+      likedArtistIds: [ID]
+      likedAlbumIds: [ID]
       createdAt: String
     }
 

@@ -4,17 +4,6 @@ import { prisma } from "../../../prisma/client";
 import { GraphQLError } from "graphql";
 
 export const resolvers: AlbumModule.Resolvers = {
-  Album: {
-    artist: async (parent) => {
-      const user = await prisma.user.findUnique({
-        where: { id: parent.id },
-      });
-      if (!user) {
-        throw new GraphQLError("User not found");
-      }
-      return user;
-    },
-  },
   Query: {
     albums: async () => {
       const albums = await prisma.album.findMany();
@@ -74,16 +63,19 @@ export const albumModule = createModule({
         type Album {
             id: ID!
             title: String!
-            artistId: Int!
-            artist: User!
+            genre: [Genre!]
+            artistId: [ID!]
+            usersIds: [ID]
             createdAt: String!
             updatedAt: String!
         }
 
         input AlbumInput {
+            id: ID!
             title: String!
-            artistId: String
-            id: String!
+            artistId: [String]
+            usersIds: [String]
+            genre: [Genre!]
         }
 
         extend type Query {

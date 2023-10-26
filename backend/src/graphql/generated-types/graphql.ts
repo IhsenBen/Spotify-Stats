@@ -19,36 +19,57 @@ export type Scalars = {
 
 export type Album = {
   __typename?: 'Album';
-  artist: User;
-  artistId: Scalars['Int']['output'];
+  artistId?: Maybe<Array<Scalars['ID']['output']>>;
   createdAt: Scalars['String']['output'];
+  genre?: Maybe<Array<Genre>>;
   id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+  usersIds?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
 };
 
 export type AlbumInput = {
-  artistId?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
+  artistId?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  genre?: InputMaybe<Array<Genre>>;
+  id: Scalars['ID']['input'];
   title: Scalars['String']['input'];
+  usersIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type Artist = {
   __typename?: 'Artist';
-  albums: Array<Album>;
-  genre: Scalars['String']['output'];
+  albumIds?: Maybe<Array<Scalars['ID']['output']>>;
+  genre?: Maybe<Array<Genre>>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  users: Array<User>;
+  trackids?: Maybe<Array<Scalars['ID']['output']>>;
+  userids?: Maybe<Array<Scalars['ID']['output']>>;
 };
 
 export type ArtistInput = {
   albums?: InputMaybe<Array<Scalars['ID']['input']>>;
-  genre?: InputMaybe<Scalars['String']['input']>;
+  genre?: InputMaybe<Array<Genre>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   name: Scalars['String']['input'];
+  tracks?: InputMaybe<Array<Scalars['ID']['input']>>;
   users?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
+
+export type Genre =
+  | 'BLUES'
+  | 'CLASSICAL'
+  | 'COUNTRY'
+  | 'ELECTRONIC'
+  | 'FOLK'
+  | 'HIPHOP'
+  | 'JAZZ'
+  | 'METAL'
+  | 'OTHER'
+  | 'POP'
+  | 'PUNK'
+  | 'RAP'
+  | 'REGGAE'
+  | 'ROCK';
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -166,14 +187,15 @@ export type QueryUserArgs = {
 
 export type Track = {
   __typename?: 'Track';
-  albums?: Maybe<Array<Album>>;
-  artist?: Maybe<Array<Artist>>;
+  albumId?: Maybe<Array<Scalars['ID']['output']>>;
+  artistId?: Maybe<Array<Scalars['ID']['output']>>;
+  genere?: Maybe<Array<Genre>>;
   id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
 };
 
 export type TrackInput = {
-  albumId?: InputMaybe<Scalars['String']['input']>;
+  albumIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   artistId?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   title: Scalars['String']['input'];
@@ -184,6 +206,8 @@ export type User = {
   createdAt?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  likedAlbumIds?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
+  likedArtistIds?: Maybe<Array<Maybe<Scalars['ID']['output']>>>;
   password?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Scalars['String']['output']>;
   userName?: Maybe<Scalars['String']['output']>;
@@ -192,7 +216,10 @@ export type User = {
 export type UserInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  likedAlbumIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  likedArtistIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   password?: InputMaybe<Scalars['String']['input']>;
+  role?: InputMaybe<Scalars['String']['input']>;
   userName?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -272,8 +299,8 @@ export type ResolversTypes = {
   Artist: ResolverTypeWrapper<Artist>;
   ArtistInput: ArtistInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Genre: Genre;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
-  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -291,7 +318,6 @@ export type ResolversParentTypes = {
   ArtistInput: ArtistInput;
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
-  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
@@ -302,21 +328,23 @@ export type ResolversParentTypes = {
 };
 
 export type AlbumResolvers<ContextType = any, ParentType extends ResolversParentTypes['Album'] = ResolversParentTypes['Album']> = {
-  artist?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  artistId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  artistId?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  genre?: Resolver<Maybe<Array<ResolversTypes['Genre']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  usersIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ArtistResolvers<ContextType = any, ParentType extends ResolversParentTypes['Artist'] = ResolversParentTypes['Artist']> = {
-  albums?: Resolver<Array<ResolversTypes['Album']>, ParentType, ContextType>;
-  genre?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  albumIds?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
+  genre?: Resolver<Maybe<Array<ResolversTypes['Genre']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  trackids?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
+  userids?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -348,8 +376,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type TrackResolvers<ContextType = any, ParentType extends ResolversParentTypes['Track'] = ResolversParentTypes['Track']> = {
-  albums?: Resolver<Maybe<Array<ResolversTypes['Album']>>, ParentType, ContextType>;
-  artist?: Resolver<Maybe<Array<ResolversTypes['Artist']>>, ParentType, ContextType>;
+  albumId?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
+  artistId?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType>;
+  genere?: Resolver<Maybe<Array<ResolversTypes['Genre']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -359,6 +388,8 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  likedAlbumIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>;
+  likedArtistIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['ID']>>>, ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

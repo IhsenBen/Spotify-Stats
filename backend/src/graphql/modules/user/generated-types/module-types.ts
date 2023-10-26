@@ -3,13 +3,13 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace UserModule {
   interface DefinedFields {
-    User: 'id' | 'userName' | 'password' | 'email' | 'role' | 'createdAt';
+    User: 'id' | 'userName' | 'password' | 'email' | 'role' | 'likedArtistIds' | 'likedAlbumIds' | 'createdAt';
     Query: 'users' | 'user';
     Mutation: 'createUser' | 'loginUser' | 'updateUser' | 'deleteUser';
   };
   
   interface DefinedInputFields {
-    UserInput: 'userName' | 'password' | 'email' | 'id';
+    UserInput: 'id' | 'userName' | 'password' | 'email' | 'likedArtistIds' | 'likedAlbumIds' | 'role';
   };
   
   export type UserInput = Pick<Types.UserInput, DefinedInputFields['UserInput']>;
@@ -38,6 +38,8 @@ export namespace UserModule {
       password?: gm.Middleware[];
       email?: gm.Middleware[];
       role?: gm.Middleware[];
+      likedArtistIds?: gm.Middleware[];
+      likedAlbumIds?: gm.Middleware[];
       createdAt?: gm.Middleware[];
     };
     Query?: {

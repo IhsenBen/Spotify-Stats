@@ -4,86 +4,85 @@ import { createModule, gql } from "graphql-modules";
 import { ArtistModule } from "./generated-types/module-types";
 
 export const artistsResolver: ArtistModule.Resolvers = {
-    Query: {
-        artists: async () => {
-            const artists = await prisma.artist.findMany();
-            return artists;
-        },
-        artist: async (_, { id }) => {
-            const artist = await prisma.artist.findUnique({
-                where: { id: String(id) },
-            });
-            if (!artist) {
-                throw new GraphQLError("Artist not found");
-            }
-            return artist;
-        },
+  Query: {
+    artists: async () => {
+      const artists = await prisma.artist.findMany();
+      return artists;
     },
-
-    Mutation: {
-        createArtist: async (_, { input }) => {
-           // check if artist exists
-            const artistExists = await prisma.artist.findFirst({
-                where: { name: input.name },
-            });
-
-            if (artistExists) {
-                throw new GraphQLError("This artist already exists");
-            }
-            const artist = await prisma.artist.create({
-                data: {
-                    name: input.name,
-                    genre: input.genre,
-                    albums: {
-                        connect: input.albums?.map((albumId) => ({
-                            id: albumId,
-                        })),
-                    },
-                    users: {
-                        connect: input.users?.map((userId) => ({
-                            id: userId,
-                        })),
-                    },
-                },
-            });
-            return artist;
-        },
-        updateArtist: async (_, { input }) => {
-            const artist = await prisma.artist.update({
-                where: { id: String(input.id) },
-                data: {
-                    ...input,
-                },
-            });
-            return artist;
-        },
-        deleteArtist: async (_, { id }) => {
-            const artist = await prisma.artist.delete({
-                where: { id: String(id) },
-            });
-            return artist;
-        },
+    artist: async (_, { id }) => {
+      const artist = await prisma.artist.findUnique({
+        where: { id: String(id) },
+      });
+      if (!artist) {
+        throw new GraphQLError("Artist not found");
+      }
+      return artist;
     },
+  },
 
+  Mutation: {
+    createArtist: async (_, { input }) => {
+      const artistExists = await prisma.artist.findFirst({
+        where: { name: input.name },
+      });
+
+      if (artistExists) {
+        throw new GraphQLError("This artist already exists");
+      }
+      const artist = await prisma.artist.create({
+        data: {
+          name: input.name,
+          genre: input.genre,
+          albums: {
+            connect: input.albums?.map((albumId) => ({
+              id: albumId,
+            })),
+          },
+          users: {
+            connect: input.users?.map((userId) => ({
+              id: userId,
+            })),
+          },
+        },
+      });
+      return artist;
+    },
+    updateArtist: async (_, { input }) => {
+      const artist = await prisma.artist.update({
+        where: { id: String(input.id) },
+        data: {
+          ...input,
+        },
+      });
+      return artist;
+    },
+    deleteArtist: async (_, { id }) => {
+      const artist = await prisma.artist.delete({
+        where: { id: String(id) },
+      });
+      return artist;
+    },
+  },
 };
 
-
 export const artistModule = createModule({
-    id: "artists",
-    dirname: __dirname,
-    typeDefs: gql`
+  id: "artists",
+  dirname: __dirname,
+  typeDefs: gql`
         type Artist {
             id: ID!
             name: String!
-            genre: String!
-            users: [User!]!
-            albums: [Album!]!
+            genre: [Genre!]
+            trackids: [ID!]
+            albumIds: [ID!]
+            userids: [ID!]
         }
 
         input ArtistInput {
             id: ID
             name: String!
-            genre: String
+            genre: [Genre!]
+            tracks: [ID!]
             albums: [ID!]
             users: [ID!]
         }
@@ -99,5 +98,5 @@ export const artistModule = createModule({
             deleteArtist(id: ID!): Artist!
         }
     `,
-    resolvers: artistsResolver,
+  resolvers: artistsResolver,
 });

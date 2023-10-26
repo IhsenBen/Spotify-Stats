@@ -59,31 +59,47 @@ export const trackModule = createModule({
   id: "track",
   dirname: __dirname,
   typeDefs: gql`
-type Track {
-  id: ID!
-  title: String!
-  artist: [Artist!]
-  albums: [Album!]
-}
+    enum Genre {
+      ROCK
+      POP
+      JAZZ
+      METAL
+      CLASSICAL
+      HIPHOP
+      RAP
+      COUNTRY
+      BLUES
+      FOLK
+      PUNK
+      REGGAE
+      ELECTRONIC
+      OTHER
+    }
+    type Track {
+      id: ID!
+      title: String!
+      artistId: [ID!]
+      albumId: [ID!]
+      genere: [Genre!]
+    }
 
-extend type Query {
-  tracks: [Track!]!
-  track(id: ID!): Track!
-}
+    extend type Query {
+      tracks: [Track!]!
+      track(id: ID!): Track!
+    }
 
-extend type Mutation {
-  createTrack(input: TrackInput!): Track!
-  updateTrack(input: TrackInput!): Track!
-  deleteTrack(id: ID!): Track!
-}
+    extend type Mutation {
+      createTrack(input: TrackInput!): Track!
+      updateTrack(input: TrackInput!): Track!
+      deleteTrack(id: ID!): Track!
+    }
 
-
-input TrackInput {
-  title: String!
-  artistId: String
-  albumId: String
-  id: String!
-}
-`,
+    input TrackInput {
+      title: String!
+      artistId: String
+      albumIds: [ID!]
+      id: String!
+    }
+  `,
   resolvers: trackResolver,
 });

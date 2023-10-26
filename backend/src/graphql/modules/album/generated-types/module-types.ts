@@ -3,17 +3,17 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace AlbumModule {
   interface DefinedFields {
-    Album: 'id' | 'title' | 'artistId' | 'artist' | 'createdAt' | 'updatedAt';
+    Album: 'id' | 'title' | 'genre' | 'artistId' | 'usersIds' | 'createdAt' | 'updatedAt';
     Query: 'albums' | 'album';
     Mutation: 'createAlbum' | 'updateAlbum' | 'deleteAlbum';
   };
   
   interface DefinedInputFields {
-    AlbumInput: 'title' | 'artistId' | 'id';
+    AlbumInput: 'id' | 'title' | 'artistId' | 'usersIds' | 'genre';
   };
   
   export type Album = Pick<Types.Album, DefinedFields['Album']>;
-  export type User = Types.User;
+  export type Genre = Types.Genre;
   export type AlbumInput = Pick<Types.AlbumInput, DefinedInputFields['AlbumInput']>;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
@@ -36,8 +36,9 @@ export namespace AlbumModule {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
       title?: gm.Middleware[];
+      genre?: gm.Middleware[];
       artistId?: gm.Middleware[];
-      artist?: gm.Middleware[];
+      usersIds?: gm.Middleware[];
       createdAt?: gm.Middleware[];
       updatedAt?: gm.Middleware[];
     };

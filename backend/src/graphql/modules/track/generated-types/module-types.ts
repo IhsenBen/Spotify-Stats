@@ -3,18 +3,21 @@ import * as Types from "../../../generated-types/graphql";
 import * as gm from "graphql-modules";
 export namespace TrackModule {
   interface DefinedFields {
-    Track: 'id' | 'title' | 'artist' | 'albums';
+    Track: 'id' | 'title' | 'artistId' | 'albumId' | 'genere';
     Query: 'tracks' | 'track';
     Mutation: 'createTrack' | 'updateTrack' | 'deleteTrack';
   };
   
-  interface DefinedInputFields {
-    TrackInput: 'title' | 'artistId' | 'albumId' | 'id';
+  interface DefinedEnumValues {
+    Genre: 'ROCK' | 'POP' | 'JAZZ' | 'METAL' | 'CLASSICAL' | 'HIPHOP' | 'RAP' | 'COUNTRY' | 'BLUES' | 'FOLK' | 'PUNK' | 'REGGAE' | 'ELECTRONIC' | 'OTHER';
   };
   
+  interface DefinedInputFields {
+    TrackInput: 'title' | 'artistId' | 'albumIds' | 'id';
+  };
+  
+  export type Genre = DefinedEnumValues['Genre'];
   export type Track = Pick<Types.Track, DefinedFields['Track']>;
-  export type Artist = Types.Artist;
-  export type Album = Types.Album;
   export type Query = Pick<Types.Query, DefinedFields['Query']>;
   export type Mutation = Pick<Types.Mutation, DefinedFields['Mutation']>;
   export type TrackInput = Pick<Types.TrackInput, DefinedInputFields['TrackInput']>;
@@ -37,8 +40,9 @@ export namespace TrackModule {
       '*'?: gm.Middleware[];
       id?: gm.Middleware[];
       title?: gm.Middleware[];
-      artist?: gm.Middleware[];
-      albums?: gm.Middleware[];
+      artistId?: gm.Middleware[];
+      albumId?: gm.Middleware[];
+      genere?: gm.Middleware[];
     };
     Query?: {
       '*'?: gm.Middleware[];

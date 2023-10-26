@@ -1,8 +1,8 @@
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
-
 }
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,6 +12,7 @@ model User {
   username       String   @unique
   email          String   @unique
   password       String
+  role           String   @default("user")
   likedArtists   Artist[] @relation(fields: [likedArtistIds], references: [id])
   likedArtistIds String[] @db.ObjectId
   likedAlbums    Album[]  @relation(fields: [likedAlbumIds], references: [id])
@@ -22,30 +23,32 @@ model User {
 model Artist {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  genre    String
   users    User[]   @relation(fields: [userIds], references: [id])
+  userIds  String[] @db.ObjectId
   tracks   Tracks[] @relation(fields: [trackIds], references: [id])
   trackIds String[] @db.ObjectId
-  userIds  String[] @db.ObjectId
   albums   Album[] 
+  albumIds String[] @db.ObjectId
 }
 
 model Album {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   title    String
-  artist   Artist @relation(fields: [artistId], references: [id])
-  artistId String @db.ObjectId
-  users    User[]  @relation(fields: [userIds], references: [id])
+  genre    String[]
+  artist   Artist   @relation(fields: [artistId], references: [id])
+  artistId String   @db.ObjectId
+  users    User[]   @relation(fields: [userIds], references: [id])
   userIds  String[] @db.ObjectId
   tracks   Tracks[] @relation(fields: [trackIds], references: [id])
   trackIds String[] @db.ObjectId
 }
 
 model Tracks {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   title    String
   artist   Artist[] @relation(fields: [artistId], references: [id])
   artistId String[] @db.ObjectId
   albumId  String[] @db.ObjectId
-  albums  Album[] @relation(fields: [albumId], references: [id])
+  albums   Album[]  @relation(fields: [albumId], references: [id])
+  genre  String[]
 }
