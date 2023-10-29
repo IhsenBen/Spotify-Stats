@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import { AboutPage } from '@/components/views/About'
+---
+
+<Layout title='About Page | My Site'>
+  <main>
+    <AboutPage client:load />
+  </main>
+</Layout>
